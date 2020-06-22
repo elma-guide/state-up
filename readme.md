@@ -1,4 +1,4 @@
-# stateup
+# state-up
 
 Upload your state.dat automatically.
 
@@ -27,7 +27,7 @@ Can be triggered in any way you choose.
     - Press _Open command window here_ or _Open PowerShell window here_ or whatever is available on your machine
 1. Run the command `python -m pip install -r dependencies`
 1. Feel free to delete the files `dependencies`, `readme.md`, and `changelog.md` as they are not required to run the program
-1. Run the command `python stateup.py` and follow the instructions
+1. Run the command `python stateup.py` and follow the instructions. The instructions will appear in `stateup.log`.
 
 #### Setting up stateup to run when you double click it
 
@@ -65,7 +65,8 @@ You can set up the application as a Windows Task to have it run on a schedule.
         -  Program/script: C:\Python38\pythonw.exe*
             - pythonw is the no-terminal version of python
             - To find yours, you can try `where pythonw` on your commandline
-        - Add arguments: stateup.py
+        - Add arguments: stateup.py --log
+            - The log option will make all output appear in a .log file in the script directory
         - Start in: C:\\...\\stateup
             - This must be the exact directory stateup.py is in
             - To get this open the folder in explorer and copy the text at the top

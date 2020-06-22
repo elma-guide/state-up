@@ -5,6 +5,7 @@ from json.decoder import JSONDecodeError
 from requests import Session
 from hashlib import sha1
 
+
 def error(message):
     print(f'[ERROR] {message}')
 
@@ -120,20 +121,35 @@ config_file = 'stateup.config.json'
 
 
 if __name__ == '__main__':
-    sys.stdout = open('stateup.log', 'w')
+    if len(sys.argv) > 1 and sys.argv[1] == '--log':
+        try:
+            sys.stdout = open('stateup.log', 'w')
+        except IOError:
+            error('--log provided but could not open log file for writing.')
+            exit(-1)
 
     config = load_config()
-
+    
     if config is None:
+        error("Failed to load config")
         exit(-1)
 
-    username = config['settings']['username']
-    password = config['settings']['password']
-    state_path = config['settings']['state.dat']
+    try:
+        username = config['settings']['username']
+        password = config['settings']['password']
+        state_path = config['settings']['state.dat']
+    except KeyError:
+        error('Invalid config. Delete it and generate a new one.')
+        exit(-1)
 
     # Check if state file has changed
     previous_hash = config['data']['hash']
-    hash = state_hash(state_path)
+    try:
+        hash = state_hash(state_path)
+    except FileNotFoundError:
+        error(f'{state_path} could not be hashed. Does it exist?')
+        exit(-1)
+    
     if hash == previous_hash:
         print(f'{state_path} has not changed. Nothing to do.')
         exit()
